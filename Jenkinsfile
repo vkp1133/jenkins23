@@ -30,7 +30,7 @@ pipeline {
 		  }
 		}
 		
-		stage('Maven compile')
+		stage('Code Scan')
 		{
 		  steps {
 		  sh 'mvn sonar:sonar -Dsonar.host.url=http://34.125.66.18:9000 -Dsonar.login=c803458a833c088748b47e73202b667737dc97b6'

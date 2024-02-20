@@ -2,19 +2,44 @@ pipeline {
     agent any
 
     tools {
-       maven 'Apache Maven 3.9.1'
+       maven 'maven-3.9.6'
     }
 
     stages {
         stage('git clone') {
             steps {
-              git credentialsId: 'github', url: 'https://github.com/kartikeyapro/ks.git'
+              git credentialsId: 'github', url: 'https://github.com/vkp1133/ks.git'
             }
         }
+		stage('Maven version')
+		{
+		  steps {
+		  sh 'mvn --version'
+		  }
+		}
 		stage('Maven Clean')
 		{
 		  steps {
 		  sh 'mvn clean'
+		  }
+		}
+		stage('Maven validate')
+		{
+		  steps {
+		  sh 'mvn validate'
+		  }
+		}
+		stage('sonar scan')
+		{
+		  steps {
+		  sh 'mvn sonar:sonar -Dsonar.host.url=http://16.170.141.195:9000 -Dsonar.login=2b3d40882ef4eb5adba65dbdc83ad126aa001e0d'
+		  }
+		}
+		
+		stage('Maven compile')
+		{
+		  steps {
+		  sh 'mvn compile'
 		  }
 		}
 		stage('Maven Test')
@@ -22,21 +47,7 @@ pipeline {
 		  steps {
 		  sh 'mvn test'
 		  }
-		}
-		stage('Maven compile')
-		{
-		  steps {
-		  sh 'mvn compile'
-		  }
-		}
-	    
-        stage('Maven compile')
-		{
-		  steps {
-		  sh 'mvn sonar:sonar -Dsonar.host.url=http://3.85.227.113:9000 -Dsonar.login=9047b7a58b273a59b70799eabd48f0b23b9fc7dd'
-		  }
-		}		
-				
+		}				
 		stage('Maven Package')
 		{
 		  steps {
@@ -51,3 +62,7 @@ pipeline {
 		}
 	}
 }
+
+
+
+
